@@ -45,11 +45,7 @@ import javax.transaction.UserTransaction;
 
 import org.apache.aries.jpa.container.itest.entities.Car;
 import org.apache.aries.jpa.itest.AbstractJPAItest;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.CoreOptions;
-import org.ops4j.pax.exam.Option;
 
 public abstract class JPAContextTest extends AbstractJPAItest {
   
@@ -358,12 +354,19 @@ public abstract class JPAContextTest extends AbstractJPAItest {
       if(expectedToFail)
         fail("A transaction is required");
     } catch (InvocationTargetException ite) {
+      Throwable e = ite;
+      while(e != null && !(e instanceof TransactionRequiredException)) {
+        e = e.getCause();
+      }
+      if(e==null) {
+        e = ite.getCause();
+      }
       if(expectedToFail && 
-          !!!(ite.getCause() instanceof TransactionRequiredException))
+          !!!(e instanceof TransactionRequiredException))
         fail("We got the wrong failure. Expected a TransactionRequiredException" +
         		", got a " + ite.toString());
       else if (!!!expectedToFail && 
-          ite.getCause() instanceof TransactionRequiredException)
+          e instanceof TransactionRequiredException)
         fail("We got the wrong failure. Expected not to get a TransactionRequiredException" +
             ", but we got one anyway!");
     }

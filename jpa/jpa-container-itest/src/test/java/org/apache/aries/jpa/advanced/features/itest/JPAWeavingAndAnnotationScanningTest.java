@@ -28,7 +28,8 @@ public abstract class JPAWeavingAndAnnotationScanningTest extends AbstractJPAIte
 
 	@Test
 	public void testAnnotatedClassFound() throws Exception {
-		EntityManagerFactory emf = getEMF(TEST_UNIT);
+		Thread.sleep(20000);
+	  EntityManagerFactory emf = getEMF(TEST_UNIT);
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 

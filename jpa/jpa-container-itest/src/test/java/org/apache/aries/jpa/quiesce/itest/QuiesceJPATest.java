@@ -360,7 +360,7 @@ public class QuiesceJPATest extends AbstractJPAItest {
 	public Option[] configuration() {
 		return options(
 				baseOptions(),
-				ariesJpa(),
+				ariesJpa20(),
 				openJpa(),
 				testDs(),
 				testBundle()

@@ -17,18 +17,19 @@ package org.apache.aries.jpa.context.itest;
 
 import static org.ops4j.pax.exam.CoreOptions.options;
 
-import org.junit.Ignore;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 
-@Ignore
+
 public class EclipseLinkContextTest extends JPAContextTest {
     @Configuration
     public Option[] eclipseLinkConfig() {
         return options(
         		baseOptions(),
-        		ariesJpa(),
+        		ariesJpa21(),
+        		transactionWrapper(),
         		eclipseLink(),
+            
                 testBundleEclipseLink()
         );
     }

@@ -29,7 +29,6 @@ import org.ops4j.pax.exam.Option;
 public class JPAInjectionTest extends AbstractJPAItest {
 
   @Test
-  @Ignore
   public void findResources() throws Exception {
     JPATestBean bean = context().getService(JPATestBean.class, "(version=1.0.0)");
     
@@ -38,7 +37,6 @@ public class JPAInjectionTest extends AbstractJPAItest {
   }
   
   @Test
-  @Ignore
   public void findResources_110() throws Exception {
     JPATestBean bean = context().getService(JPATestBean.class, "(version=1.1.0)");
     
@@ -50,7 +48,6 @@ public class JPAInjectionTest extends AbstractJPAItest {
   }
   
   @Test
-  @Ignore
   public void testLifecycle() throws Exception {
     JPATestBean bean = context().getService(JPATestBean.class, "(lifecycle=true)");
     assertTrue("No persistence context injection", bean.pContextAvailable());
@@ -63,7 +60,7 @@ public class JPAInjectionTest extends AbstractJPAItest {
   public Option[] configuration() {
     return options(
     		baseOptions(),
-    		ariesJpa(),
+    		ariesJpa20(),
     		openJpa(),
     		testDs(),
     		testBundleBlueprint(),

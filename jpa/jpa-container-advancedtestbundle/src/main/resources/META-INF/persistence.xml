@@ -24,7 +24,7 @@
   
   <persistence-unit name="test-unit" transaction-type="RESOURCE_LOCAL">
     <description>Test persistence unit for the JPA Container advanced iTests</description>
-    <properties>
+	<properties>
       <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
       <property name="javax.persistence.jdbc.databaseName" value="memory:TEST;create=true"/>
