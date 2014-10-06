@@ -16,7 +16,7 @@
 package org.apache.aries.jpa.advanced.features.itest;
 
 import org.apache.aries.jpa.container.PersistenceUnitConstants;
-import org.apache.aries.jpa.container.itest.entities.Car;
+import org.apache.aries.jpa.container.advanced.itest.bundle.entities.Car;
 import org.eclipse.persistence.internal.weaving.PersistenceWeaved;
 import org.junit.Test;
 import org.ops4j.pax.exam.Configuration;
@@ -37,7 +37,7 @@ public class EclipseLinkWeavingAndAnnotationScanningTest extends JPAWeavingAndAn
             ariesJpa21(),
             transactionWrapper(),
             eclipseLink(),
-            testBundleEclipseLink(),
+            mavenBundle("org.apache.aries.jpa", "org.apache.aries.jpa.eclipselink.adapter").versionAsInProject(),
             testBundleAdvanced()          
         );
     }
