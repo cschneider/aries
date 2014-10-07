@@ -135,8 +135,11 @@ public abstract class JPAContextTest extends AbstractJPAItest {
       ensureTREBehaviour(false, managedEm, "createNativeQuery", "hi", "hi");
       ensureTREBehaviour(false, managedEm, "createQuery", "hi");
       ensureTREBehaviour(false, managedEm, "find", Object.class, new Object());
-      ensureTREBehaviour(false, managedEm, "joinTransaction");
+      ut.rollback();
+      ut.begin();
       ensureTREBehaviour(false, managedEm, "flush");
+      ut.rollback();
+      ut.begin();
       ensureTREBehaviour(false, managedEm, "getDelegate");
       ensureTREBehaviour(false, managedEm, "getFlushMode");
       ensureTREBehaviour(false, managedEm, "getReference", Object.class, new Object());
@@ -352,8 +355,9 @@ public abstract class JPAContextTest extends AbstractJPAItest {
     
     try {
       m.invoke(em, args);
-      if(expectedToFail)
-        fail("A transaction is required");
+      if (expectedToFail) {
+                fail("Should have failed with TransactionRequiredException");
+            }
     } catch (InvocationTargetException ite) {
       Throwable e = ite;
       while(e != null && !(e instanceof TransactionRequiredException)) {

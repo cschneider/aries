@@ -32,12 +32,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
 
 public class EclipseLinkContextTest extends JPAContextTest {
   @Test
   public void testDeleteQuery() throws Exception {
-    EntityManagerFactory emf = getEMF(BP_TEST_UNIT);
+    registerClient(BP_TEST_UNIT);
+    EntityManagerFactory emf = getProxyEMF(BP_TEST_UNIT);
     EntityManager em = emf.createEntityManager();
 
     try {
@@ -58,10 +58,6 @@ public class EclipseLinkContextTest extends JPAContextTest {
 
     assertEquals(7, em.find(Car.class, "AB11CDE").getNumberOfSeats());
 
-    em.close();
-
-    em = emf.createEntityManager();
-
     CriteriaBuilder cb = em.getCriteriaBuilder();
     Method createCriteriaDelete = cb.getClass().getMethod("createCriteriaDelete", Class.class);
     final List<Object> l = new ArrayList<Object>();
@@ -79,13 +75,18 @@ public class EclipseLinkContextTest extends JPAContextTest {
     } catch(Exception e) {
       ut.rollback();
     }
+    
+    Car c = em.find(Car.class, "AB11CDE");
+    assertEquals(c, null);
   }
 
   @Configuration
   public Option[] eclipseLinkConfig() {
-    return options(baseOptions(), ariesJpa21(), transactionWrapper(), eclipseLink(),
-
-    testBundleEclipseLink());
+    return options(baseOptions(), 
+        ariesJpa21(), 
+        transactionWrapper(), 
+        eclipseLink(),
+        testBundleEclipseLink());
   }
 
 }

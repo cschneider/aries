@@ -137,13 +137,14 @@ public class JTAEntityManagerHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if ("close".equals(method.getName())) {
+        String methodName = method.getName();
+        if ("close".equals(methodName)) {
             throw new IllegalStateException(NLS.MESSAGES.getMessage("close.called.on.container.manged.em"));
         }
-        if ("getTransaction".equals(method.getName())) {
+        if ("getTransaction".equals(methodName)) {
             throw new IllegalStateException(NLS.MESSAGES.getMessage("getTransaction.called.on.container.managed.em"));
         }
-        if ("isOpen".equals(method.getName())) {
+        if ("isOpen".equals(methodName)) {
             return true;
         }
         if ("joinTransaction".equals(method.getName())) {
@@ -151,25 +152,29 @@ public class JTAEntityManagerHandler implements InvocationHandler {
             return null;
         }
         
-        if ("postCall".equals(method.getName())) {
+        if ("postCall".equals(methodName)) {
             postCall();
             return null;
         }
         
-        if ("preCall".equals(method.getName())) {
+        if ("preCall".equals(methodName)) {
             preCall();
             return null;
         }
         
-        if ("internalClose".equals(method.getName())) {
+        if ("internalClose".equals(methodName)) {
             internalClose();
             return null;
         }
         
-        boolean forceTransaction = transactedMethods.contains(method.getName());
+        boolean forceTransaction = transactedMethods.contains(methodName);
         
         // TODO Check if this can be reached
-        if ("joinTransaction".equals(method.getName())) {
+        if ("joinTransaction".equals(methodName) && args != null && args.length > 2 && args[2].getClass() == LockModeType.class) {
+            forceTransaction = args[2] != LockModeType.NONE;
+        }
+        
+        if ("find".equals(methodName) && args != null && args.length >= 3 && args[2].getClass() == LockModeType.class) {
             forceTransaction = args[2] != LockModeType.NONE;
         }
         

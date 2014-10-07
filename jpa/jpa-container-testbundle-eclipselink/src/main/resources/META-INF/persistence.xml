@@ -45,7 +45,6 @@
 			<property name="eclipselink.target-database" value="Derby" />
 			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
     		<property name="eclipselink.ddl-generation.output-mode" value="database" />
-<!--     		<property name="eclipselink.target-server" value="org.apache.aries.jpa.eclipselink.adapter.platform.OSGiTSServer"/>  -->
 		</properties>
 	</persistence-unit>
 
@@ -61,7 +60,6 @@
 			<property name="eclipselink.target-database" value="Derby" />
 			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
      		<property name="eclipselink.ddl-generation.output-mode" value="database" />
-<!--      		<property name="eclipselink.target-server" value="org.apache.aries.jpa.eclipselink.adapter.platform.OSGiTSServer"/>  -->
 		</properties>
 	</persistence-unit>
 </persistence>
