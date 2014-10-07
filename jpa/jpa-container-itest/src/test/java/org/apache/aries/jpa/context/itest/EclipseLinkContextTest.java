@@ -52,7 +52,7 @@ public class EclipseLinkContextTest extends JPAContextTest {
 
       ut.commit();
 
-    } finally {
+    } catch(Exception e) {
       ut.rollback();
     }
 
@@ -76,7 +76,7 @@ public class EclipseLinkContextTest extends JPAContextTest {
       Query q = (Query) createQuery.invoke(em, criteriaDelete);
       q.executeUpdate();
       ut.commit();
-    } finally {
+    } catch(Exception e) {
       ut.rollback();
     }
   }
