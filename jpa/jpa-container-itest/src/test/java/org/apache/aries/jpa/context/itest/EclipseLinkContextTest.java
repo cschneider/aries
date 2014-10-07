@@ -15,23 +15,68 @@
  */
 package org.apache.aries.jpa.context.itest;
 
-import static org.ops4j.pax.exam.CoreOptions.options;
 
+import org.apache.aries.jpa.container.itest.entities.Car;
+import org.junit.Test;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 
+import static org.junit.Assert.assertEquals;
+import static org.ops4j.pax.exam.CoreOptions.options;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
 
 public class EclipseLinkContextTest extends JPAContextTest {
-    @Configuration
-    public Option[] eclipseLinkConfig() {
-        return options(
-        		baseOptions(),
-        		ariesJpa21(),
-        		transactionWrapper(),
-        		eclipseLink(),
-            
-                testBundleEclipseLink()
-        );
-    }
-	
+  @Test
+  public void testDeleteQuery() throws Exception {
+    EntityManagerFactory emf = getEMF(BP_TEST_UNIT);
+    EntityManager em = emf.createEntityManager();
+    
+    ut.begin();
+
+    Car c = new Car();
+    c.setColour("Blue");
+    c.setNumberPlate("AB11CDE");
+    c.setNumberOfSeats(7);
+    c.setEngineSize(1900);
+    em.persist(c);
+
+    ut.commit();
+
+    assertEquals(7, em.find(Car.class, "AB11CDE").getNumberOfSeats());
+    
+    em.close();
+    
+    em = emf.createEntityManager();
+    
+    CriteriaBuilder cb = em.getCriteriaBuilder();
+    Method createCriteriaDelete = cb.getClass().getMethod("createCriteriaDelete", Class.class);
+    final List<Object> l = new ArrayList<Object>();
+    l.add(Car.class);
+    Object criteriaDelete = createCriteriaDelete.invoke(cb, Car.class);
+    Method from = CriteriaDelete.class.getMethod("from", Class.class);
+    from.invoke(criteriaDelete, Car.class);
+    ut.begin();
+    Method createQuery = em.getClass().getMethod("createQuery", CriteriaDelete.class);
+    Query q = (Query) createQuery.invoke(em, criteriaDelete);
+    q.executeUpdate();
+    ut.commit();
+  }
+
+  @Configuration
+  public Option[] eclipseLinkConfig() {
+    return options(baseOptions(), ariesJpa21(), transactionWrapper(), eclipseLink(),
+
+    testBundleEclipseLink());
+  }
+
 }
