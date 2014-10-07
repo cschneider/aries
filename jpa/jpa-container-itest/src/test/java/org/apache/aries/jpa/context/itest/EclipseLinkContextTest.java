@@ -15,7 +15,6 @@
  */
 package org.apache.aries.jpa.context.itest;
 
-
 import org.apache.aries.jpa.container.itest.entities.Car;
 import org.junit.Test;
 import org.ops4j.pax.exam.Configuration;
@@ -40,24 +39,29 @@ public class EclipseLinkContextTest extends JPAContextTest {
   public void testDeleteQuery() throws Exception {
     EntityManagerFactory emf = getEMF(BP_TEST_UNIT);
     EntityManager em = emf.createEntityManager();
-    
-    ut.begin();
 
-    Car c = new Car();
-    c.setColour("Blue");
-    c.setNumberPlate("AB11CDE");
-    c.setNumberOfSeats(7);
-    c.setEngineSize(1900);
-    em.persist(c);
+    try {
+      ut.begin();
 
-    ut.commit();
+      Car c = new Car();
+      c.setColour("Blue");
+      c.setNumberPlate("AB11CDE");
+      c.setNumberOfSeats(7);
+      c.setEngineSize(1900);
+      em.persist(c);
+
+      ut.commit();
+
+    } finally {
+      ut.rollback();
+    }
 
     assertEquals(7, em.find(Car.class, "AB11CDE").getNumberOfSeats());
-    
+
     em.close();
-    
+
     em = emf.createEntityManager();
-    
+
     CriteriaBuilder cb = em.getCriteriaBuilder();
     Method createCriteriaDelete = cb.getClass().getMethod("createCriteriaDelete", Class.class);
     final List<Object> l = new ArrayList<Object>();
@@ -65,11 +69,16 @@ public class EclipseLinkContextTest extends JPAContextTest {
     Object criteriaDelete = createCriteriaDelete.invoke(cb, Car.class);
     Method from = CriteriaDelete.class.getMethod("from", Class.class);
     from.invoke(criteriaDelete, Car.class);
-    ut.begin();
-    Method createQuery = em.getClass().getMethod("createQuery", CriteriaDelete.class);
-    Query q = (Query) createQuery.invoke(em, criteriaDelete);
-    q.executeUpdate();
-    ut.commit();
+
+    try {
+      ut.begin();
+      Method createQuery = em.getClass().getMethod("createQuery", CriteriaDelete.class);
+      Query q = (Query) createQuery.invoke(em, criteriaDelete);
+      q.executeUpdate();
+      ut.commit();
+    } finally {
+      ut.rollback();
+    }
   }
 
   @Configuration
