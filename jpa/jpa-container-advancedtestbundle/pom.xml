@@ -59,6 +59,7 @@
 			org.eclipse.persistence.indirection;resolution:=optional,
 			org.eclipse.persistence.jpa.jpql;resolution:=optional,
 			org.eclipse.persistence.jpa.jpql.parser;resolution:=optional,
+			org.eclipse.persistence.platform.server;resolution:=optional,
             *
         </aries.osgi.import>
         <aries.osgi.private.pkg />

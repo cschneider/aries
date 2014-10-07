@@ -135,6 +135,7 @@ public abstract class JPAContextTest extends AbstractJPAItest {
       ensureTREBehaviour(false, managedEm, "createNativeQuery", "hi", "hi");
       ensureTREBehaviour(false, managedEm, "createQuery", "hi");
       ensureTREBehaviour(false, managedEm, "find", Object.class, new Object());
+      ensureTREBehaviour(false, managedEm, "joinTransaction");
       ensureTREBehaviour(false, managedEm, "flush");
       ensureTREBehaviour(false, managedEm, "getDelegate");
       ensureTREBehaviour(false, managedEm, "getFlushMode");
