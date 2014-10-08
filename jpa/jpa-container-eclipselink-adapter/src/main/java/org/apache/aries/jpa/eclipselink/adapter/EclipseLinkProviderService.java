@@ -41,7 +41,7 @@ import javax.persistence.spi.ProviderUtil;
  */
 public class EclipseLinkProviderService implements ServiceFactory {
   private static final Logger logger = LoggerFactory.getLogger(Activator.class);
-//  private static final MessageUtil MESSAGES = MessageUtil.createMessageUtil(EclipseLinkProviderService.class, "org.apache.aries.jpa.eclipselink.adapter.jpaEclipseLinkAdapter");
+  private static final MessageUtil MESSAGES = MessageUtil.createMessageUtil(EclipseLinkProviderService.class, "org.apache.aries.jpa.eclipselink.adapter.jpaEclipseLinkAdapter");
 
   private final Bundle eclipseLinkJpaBundle;
 
@@ -90,7 +90,7 @@ public class EclipseLinkProviderService implements ServiceFactory {
       
       
     } catch (Exception e) {
-//      logger.error(MESSAGES.getMessage("error.creating.eclipselink.provider"), e);
+      logger.error(MESSAGES.getMessage("error.creating.eclipselink.provider"), e);
       return null;
     }
   }
