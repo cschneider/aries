@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.aries</groupId>
+        <artifactId>parent</artifactId>
+        <version>2.0.0</version>
+        <relativePath>../../parent/pom.xml</relativePath>
+    </parent>
+
+    <groupId>org.apache.aries.transaction</groupId>
+    <artifactId>org.apache.aries.transaction.jdbc</artifactId>
+    <name>Apache Aries Transaction Enlisting JDBC Datasource</name>
+    <version>2.1.2-SNAPSHOT</version>
+    <packaging>bundle</packaging>
+
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/aries/trunk/transaction/transaction-jdbc</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/aries/trunk/transaction/transaction-jdbc</developerConnection>
+        <url>http://svn.apache.org/viewvc/aries/trunk/transaction/transaction-jdbc</url>
+    </scm>
+
+    <properties>
+        <aries.osgi.export.pkg>
+            org.apache.aries.transaction.jdbc;-noimport:=true;version="2.1"
+        </aries.osgi.export.pkg>
+        <aries.osgi.import>
+            org.osgi.service.blueprint.*;resolution:=optional,
+            org.apache.aries.transaction;version="[1.0,2)",
+            javax.resource.*;version="[1.6,3)",
+            *
+        </aries.osgi.import>
+        <aries.osgi.private.pkg>
+            org.apache.aries.transaction.jdbc.internal,
+            org.tranql*,
+        </aries.osgi.private.pkg>
+        <aries.osgi.require.capability>
+            osgi.service; effective:=active; resolution:=optional; filter:="(objectClass=org.apache.aries.transaction.AriesTransactionManager)"
+        </aries.osgi.require.capability>
+        <aries.osgi.provide.capability>
+            osg.service; effective:=active; objectClass=org.apache.aries.blueprint.NamespaceHandler; osgi.service.blueprint.namespace="http://aries.apache.org/xmlns/transaction-jdbc/2.0",
+            osg.service; effective:=active; objectClass=org.apache.aries.blueprint.NamespaceHandler; osgi.service.blueprint.namespace="http://aries.apache.org/xmlns/transaction-jdbc/2.1"
+        </aries.osgi.provide.capability>
+        <aries.osgi.activator>
+            org.apache.aries.transaction.jdbc.internal.Activator
+        </aries.osgi.activator>
+        <lastReleaseVersion>1.0.0</lastReleaseVersion>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.aries.transaction</groupId>
+            <artifactId>org.apache.aries.transaction.manager</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.aries</groupId>
+            <artifactId>org.apache.aries.util</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.compendium</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.tranql</groupId>
+            <artifactId>tranql-connector</artifactId>
+            <version>1.8</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.components</groupId>
+            <artifactId>geronimo-connector</artifactId>
+            <version>3.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.aries.blueprint</groupId>
+            <artifactId>org.apache.aries.blueprint.core</artifactId>
+            <version>1.0.0</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xbean</groupId>
+            <artifactId>xbean-blueprint</artifactId>
+            <version>3.7</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>animal-sniffer-annotations</artifactId>
+            <version>1.7</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.xbean</groupId>
+                <artifactId>maven-xbean-plugin</artifactId>
+                <version>3.18</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>mapping</goal>
+                        </goals>
+                        <configuration>
+                            <namespace>http://aries.apache.org/xmlns/transaction-jdbc/2.1</namespace>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>concat</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <target name="concat">
+                                <concat destfile="${basedir}/target/xbean/META-INF/spring.handlers" append="true">
+                                    <filelist dir="${basedir}/src/main/resources/META-INF" files="spring.handlers" />
+                                </concat>
+                                <concat destfile="${basedir}/target/xbean/META-INF/spring.schemas" append="true">
+                                    <filelist dir="${basedir}/src/main/resources/META-INF" files="spring.schemas" />
+                                </concat>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.aries.versioning</groupId>
+                <artifactId>org.apache.aries.versioning.plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-verify</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>version-check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.5.3</version>
+                <extensions>true</extensions>
+                <inherited>true</inherited>
+                <configuration>
+                    <excludeDependencies>${aries.osgi.exclude.dependencies}</excludeDependencies>
+                    <instructions>
+                        <Bundle-Name>${project.name}</Bundle-Name>
+                        <Bundle-SymbolicName>${aries.osgi.symbolic.name}</Bundle-SymbolicName>
+                        <Bundle-Activator>${aries.osgi.activator}</Bundle-Activator>
+                        <Export-Package>${aries.osgi.export}</Export-Package>
+                        <Import-Package>${aries.osgi.import}</Import-Package>
+                        <DynamicImport-Package>${aries.osgi.dynamic}</DynamicImport-Package>
+                        <Private-Package>${aries.osgi.private.pkg}</Private-Package>
+                        <Implementation-Title>Apache Aries</Implementation-Title>
+                        <Implementation-Version>${project.version}</Implementation-Version>
+                        <Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>
+                        <Include-Resource>${aries.osgi.include.resource}</Include-Resource>
+                        <_removeheaders>${aries.osgi.remove.headers}}</_removeheaders>
+                        <_failok>${aries.osgi.failok}</_failok>
+                        <_consumer-policy>${aries.osgi.import.default.version}</_consumer-policy>
+                        <_provider-policy>$&lt;range;[==,=+)&gt;</_provider-policy>
+                        <Export-Service>${aries.osgi.export.service}</Export-Service>
+                        <Import-Service>${aries.osgi.import.service}</Import-Service>
+                        <Provide-Capability>${aries.osgi.provide.capability}</Provide-Capability>
+                        <Require-Capability>${aries.osgi.require.capability}</Require-Capability>
+                        <service_mode>generic</service_mode>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

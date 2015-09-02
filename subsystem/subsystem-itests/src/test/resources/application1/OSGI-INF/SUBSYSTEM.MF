@@ -1,0 +1,2 @@
+Subsystem-SymbolicName: org.apache.aries.subsystem.application1
+Subsystem-Content: org.apache.aries.subsystem.itests.tb1;version=1.0.0

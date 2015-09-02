@@ -1,0 +1,10 @@
+Manifest-Version: 2.0
+Subsystem-ManifestVersion: 1.0
+Subsystem-SymbolicName: org.apache.aries.subsystem.feature1
+Subsystem-Version: 1.0.0
+Subsystem-Name: %feature1.name
+Subsystem-Description: %feature1.description
+Subsystem-Content: org.apache.aries.subsystem.itests.tb1,
+ org.apache.aries.subsystem.feature2;version=1.0.0;type=osgi.subsystem.feature;start-order:=2,
+ org.apache.aries.subsystem.itests.tb3
+Subsystem-Type: osgi.subsystem.feature
